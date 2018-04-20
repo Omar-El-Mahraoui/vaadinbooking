@@ -20,6 +20,9 @@ public class ExerciseUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
         // TODO Exercise 1: Using VerticalLayout and HorizontalLayout, create a button layout resembling the buttons of an old school cellphone.
+        // Use the Button component to create the buttons:
+        // Button one = new Button("1");
+
         VerticalLayout verticalLayout = new VerticalLayout();
         HorizontalLayout row1 = new HorizontalLayout();
         HorizontalLayout row2 = new HorizontalLayout();
@@ -47,6 +50,7 @@ public class ExerciseUI extends UI {
             row4.addComponent(new Button(number));
         }
         verticalLayout.addComponent(row4);
+
         setContent(verticalLayout);
 
         // Don't forget to set your main layout using setContent(myLayout)

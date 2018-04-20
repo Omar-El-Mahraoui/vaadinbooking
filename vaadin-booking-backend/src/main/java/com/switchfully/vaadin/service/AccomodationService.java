@@ -7,14 +7,12 @@ import com.switchfully.vaadin.domain.StarRating;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
 import static com.switchfully.vaadin.domain.Accomodation.AccomodationBuilder.accomodation;
 import static com.switchfully.vaadin.domain.Accomodation.AccomodationBuilder.cloneAccomodation;
 import static java.lang.String.format;
-import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
 @Service
