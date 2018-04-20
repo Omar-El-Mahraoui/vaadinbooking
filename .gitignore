@@ -1,0 +1,24 @@
+### OS Junk ###
+.DS_Store
+
+### IntelliJ ###
+.idea
+out
+*.iml
+*.gz
+*.log
+
+### Maven ###
+target/
+
+### Class files ###
+*.class
+
+# Log file
+*.log
+
+node_modules/
+bin/
+obj/
+
+*.jar
