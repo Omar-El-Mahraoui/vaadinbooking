@@ -51,9 +51,9 @@ public class ExerciseUI extends UI {
 
         // TODO Exercise 3: Add a button next to the filter TextField to clear the filter.
         buttonDelete.addClickListener(event -> {
-            textFieldFilter.clear();
-            container.removeAllContainerFilters();
-        });
+                                                    textFieldFilter.clear();
+                                                    container.removeAllContainerFilters();
+                                                });
 
         mainLayout.setMargin(true);
         setContent(mainLayout);
