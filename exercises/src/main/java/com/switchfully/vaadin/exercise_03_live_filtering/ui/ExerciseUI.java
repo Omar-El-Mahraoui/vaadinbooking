@@ -46,8 +46,8 @@ public class ExerciseUI extends UI {
         // TODO Exercise 3: Add a filter TextField to the top of the grid to filter the list of accomodations by name.
         // switchfully presentation vaadin
         // https://stackoverflow.com/questions/42475774/how-to-add-grid-filters-in-vaadin-8
-        textFieldFilter.addTextChangeListener(e -> container.addContainerFilter("name", e.getText()
-                ,true, false));
+        textFieldFilter.addTextChangeListener(e ->
+                container.addContainerFilter("name", e.getText(),true, false));
 
         // TODO Exercise 3: Add a button next to the filter TextField to clear the filter.
         buttonDelete.addClickListener(event -> {
