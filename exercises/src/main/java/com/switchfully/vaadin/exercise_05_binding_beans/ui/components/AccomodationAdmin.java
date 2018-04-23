@@ -3,6 +3,7 @@ package com.switchfully.vaadin.exercise_05_binding_beans.ui.components;
 import com.switchfully.vaadin.domain.Accomodation;
 import com.switchfully.vaadin.service.AccomodationService;
 import com.switchfully.vaadin.service.CityService;
+import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+import static com.switchfully.vaadin.domain.Accomodation.AccomodationBuilder.accomodation;
 import static java.util.stream.Collectors.toList;
 
 //https://vaadin.com/docs/v8/framework/layout/layout-splitpanel.html
@@ -18,7 +20,7 @@ import static java.util.stream.Collectors.toList;
 
 public class AccomodationAdmin extends CustomComponent {
 
-    private final EditAccomodationForm editAccomodationForm;
+    private EditAccomodationForm editAccomodationForm;
     private Grid grid = new Grid();
 
     private AccomodationService accomodationService;
@@ -29,6 +31,7 @@ public class AccomodationAdmin extends CustomComponent {
     public AccomodationAdmin(AccomodationService accomodationService, CityService cityService) {
         this.accomodationService = accomodationService;
         this.cityService = cityService;
+
         HorizontalSplitPanel hsplit = new HorizontalSplitPanel();
 
         List<Accomodation> accomodations = accomodationService.getAccomodations();
@@ -44,24 +47,38 @@ public class AccomodationAdmin extends CustomComponent {
         hsplit.setFirstComponent(mainLayout);
 
         // TODO Exercise 5: Create an EditAccomodationForm and add it to the right of the grid to add a new accomodation.
-        // switchfully presentation vaadin
-        editAccomodationForm = new EditAccomodationForm(cityService, accomodationService);
-        editAccomodationForm.setVisible(false);
-        Button buttonSave = new Button("Save");
-        editAccomodationForm.addComponent(buttonSave);
-        buttonSave.addClickListener(event -> {
-            accomodationService.save(editAccomodationForm.getAccomodation());
-            populateGrid(accomodationService.getAccomodations());
-        });
-
-        hsplit.setSecondComponent(editAccomodationForm);
+        hsplit.setSecondComponent(createEditAccomodationForm(accomodation().build()));
 
         // TODO Exercise 5: When selecting an accomodation in the grid, load it in the EditAccomodationForm to update it.
+        updateExistingAccomodation();
         // TODO Exercise 5: Add a 'Delete' button to the form to delete an accomodation.
         // TODO Exercise 5: Add a 'Cancel' button to the form to close the form.
         // TODO Exercise 5 (Extra): Add ta DateField for creationDate to the form.
 
         setCompositionRoot(hsplit);
+    }
+
+    private void updateExistingAccomodation() {
+        
+    }
+
+    private Component createEditAccomodationForm(Accomodation accomodation) {
+        // switchfully presentation vaadin
+        editAccomodationForm = new EditAccomodationForm(cityService, accomodationService, accomodation);
+        editAccomodationForm.setVisible(false);
+
+        Button buttonSave = new Button("Save");
+        editAccomodationForm.addComponent(buttonSave);
+        buttonSave.addClickListener(event -> {
+            try {
+                editAccomodationForm.commitBinder();
+            } catch (FieldGroup.CommitException e) {
+                e.printStackTrace();
+            }
+            accomodationService.save(editAccomodationForm.getAccomodation());
+            populateGrid(accomodationService.getAccomodations());
+        });
+        return editAccomodationForm;
     }
 
     private Button addNewAccomodationButton() {

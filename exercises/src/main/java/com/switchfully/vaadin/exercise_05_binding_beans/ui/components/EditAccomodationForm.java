@@ -2,14 +2,16 @@ package com.switchfully.vaadin.exercise_05_binding_beans.ui.components;
 
 import com.switchfully.vaadin.domain.Accomodation;
 import com.switchfully.vaadin.domain.City;
+import com.switchfully.vaadin.domain.StarRating;
 import com.switchfully.vaadin.service.AccomodationService;
 import com.switchfully.vaadin.service.CityService;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
+import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static com.switchfully.vaadin.domain.Accomodation.AccomodationBuilder.accomodation;
+import java.util.Arrays;
 
 //https://vaadin.com/docs/v8/framework/components/components-combobox.html
 
@@ -21,11 +23,12 @@ public class EditAccomodationForm extends FormLayout {
     private BeanFieldGroup<Accomodation> binder;
 
     @Autowired
-    public EditAccomodationForm(CityService cityService, AccomodationService accomodationService) {
-        this.accomodation = accomodation().build();
+    public EditAccomodationForm(CityService cityService, AccomodationService accomodationService, Accomodation accomodation) {
+        this.accomodation = accomodation;
         this.accomodationService = accomodationService;
         this.cityService = cityService;
         this.binder = new BeanFieldGroup<>(Accomodation.class);
+        binder.setItemDataSource(accomodation);
 
         addNameField();
         addCityField();
@@ -38,8 +41,6 @@ public class EditAccomodationForm extends FormLayout {
     }
 
     private void addCityField() {
-        binder.setItemDataSource(accomodation);
-
         ComboBox cities = new ComboBox("City", cityService.getCities());
         for (City city : cityService.getCities()) {
             cities.setItemCaption(city, city.getName());
@@ -54,7 +55,18 @@ public class EditAccomodationForm extends FormLayout {
     }
 
     private void addRatingField() {
-        addComponent(binder.buildAndBind("Rating", "starRating"));
+        ComboBox ratings = new ComboBox("Rating", Arrays.asList(StarRating.values()));
+
+        for (StarRating rating : StarRating.values()) {
+            ratings.setItemCaption(rating, rating.toString());
+        }
+        ratings.setInputPrompt("Choose rating");
+        binder.bind(ratings, "starRating");
+        addComponent(ratings);
+    }
+
+    public void commitBinder() throws FieldGroup.CommitException {
+        binder.commit();
     }
 
     public Accomodation getAccomodation() {
