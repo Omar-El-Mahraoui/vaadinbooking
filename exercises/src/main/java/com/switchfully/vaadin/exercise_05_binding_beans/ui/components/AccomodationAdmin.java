@@ -7,41 +7,71 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static com.switchfully.vaadin.domain.Accomodation.AccomodationBuilder.accomodation;
 import static java.util.stream.Collectors.toList;
+
+//https://vaadin.com/docs/v8/framework/layout/layout-splitpanel.html
+// switchfully presentation vaadin
 
 public class AccomodationAdmin extends CustomComponent {
 
+    private final EditAccomodationForm editAccomodationForm;
     private Grid grid = new Grid();
 
     private AccomodationService accomodationService;
     private CityService cityService;
     private TextField filter;
 
+    @Autowired
     public AccomodationAdmin(AccomodationService accomodationService, CityService cityService) {
         this.accomodationService = accomodationService;
         this.cityService = cityService;
+        HorizontalSplitPanel hsplit = new HorizontalSplitPanel();
 
         List<Accomodation> accomodations = accomodationService.getAccomodations();
         populateGrid(accomodations);
         CssLayout filtering = createFilterComponent(accomodations);
 
         // TODO Exercise 5: Add a 'New Accomodation' button.
+        Button buttonAddNewAccomodation = addNewAccomodationButton();
+        HorizontalLayout toolbar = new HorizontalLayout(filtering, buttonAddNewAccomodation);
+        toolbar.setSpacing(true);
+        VerticalLayout mainLayout = new VerticalLayout(toolbar, grid);
+        mainLayout.setMargin(true);
+        hsplit.setFirstComponent(mainLayout);
+
         // TODO Exercise 5: Create an EditAccomodationForm and add it to the right of the grid to add a new accomodation.
+        // switchfully presentation vaadin
+        editAccomodationForm = new EditAccomodationForm(cityService, accomodationService);
+        editAccomodationForm.setVisible(false);
+        Button buttonSave = new Button("Save");
+        editAccomodationForm.addComponent(buttonSave);
+        buttonSave.addClickListener(event -> {
+            accomodationService.save(editAccomodationForm.getAccomodation());
+            populateGrid(accomodationService.getAccomodations());
+        });
+
+        hsplit.setSecondComponent(editAccomodationForm);
+
         // TODO Exercise 5: When selecting an accomodation in the grid, load it in the EditAccomodationForm to update it.
         // TODO Exercise 5: Add a 'Delete' button to the form to delete an accomodation.
         // TODO Exercise 5: Add a 'Cancel' button to the form to close the form.
         // TODO Exercise 5 (Extra): Add ta DateField for creationDate to the form.
 
-        HorizontalLayout toolbar = new HorizontalLayout(filtering);
-        toolbar.setSpacing(true);
+        setCompositionRoot(hsplit);
+    }
 
-        VerticalLayout mainLayout = new VerticalLayout(toolbar, grid);
-        mainLayout.setMargin(true);
-        setCompositionRoot(mainLayout);
+    private Button addNewAccomodationButton() {
+        Button addNewButton = new Button("Add new accomodation");
+        addNewButton.addClickListener(event -> {
+            if (!editAccomodationForm.isVisible()){
+                editAccomodationForm.setVisible(true);
+            }
+        });
+        return addNewButton;
     }
 
     private CssLayout createFilterComponent(List<Accomodation> accomodations) {

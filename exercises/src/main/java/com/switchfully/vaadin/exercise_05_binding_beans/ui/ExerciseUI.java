@@ -6,11 +6,10 @@ import com.switchfully.vaadin.service.CityService;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import org.springframework.beans.factory.annotation.Autowired;
+
+// switchfully presentation vaadin
 
 @SpringUI
 @Theme("valo")

@@ -19,15 +19,14 @@ public class ExerciseUI extends UI {
     private CheckBox checkBoxAutoCommit;
 
     public ExerciseUI() {
-        this.labelNameTop = new Label("Name");
+        labelNameTop = new Label("Name");
+        name = new ObjectProperty<>("");
+        textField = new TextField(name);
+        textField.setBuffered(true);
 
-        this.name = new ObjectProperty<>("");
-        this.textField = new TextField(name);
-        this.textField.setBuffered(true);
-
-        this.labelNameBottom = new Label(name);
-        this.checkBoxAutoCommit = new CheckBox("Auto commit?");
-        this.buttonUpdate = new Button("Update");
+        labelNameBottom = new Label(name);
+        checkBoxAutoCommit = new CheckBox("Auto commit?");
+        buttonUpdate = new Button("Update");
     }
 
     @Override
@@ -41,7 +40,7 @@ public class ExerciseUI extends UI {
 
         // TODO Exercise 4: Add a button to commit the field.
         // TODO Exercise 4: Clicking the button should update the Label with the value in the TextField.
-        buttonUpdate.addClickListener(event -> this.textField.commit());
+        buttonUpdate.addClickListener(event -> textField.commit());
         // TODO Exercise 4 (Extra): Add a checkbox to hide the button and make the TextField auto-commit.
         checkBoxAutoCommit.addFocusListener(event ->
                             textField.addTextChangeListener(event1 -> name.setValue(event1.getText())));
