@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import static com.switchfully.vaadin.domain.Accomodation.AccomodationBuilder.accomodation;
-import static java.util.stream.Collectors.toList;
 
 //https://vaadin.com/docs/v8/framework/layout/layout-splitpanel.html
 // switchfully presentation vaadin
